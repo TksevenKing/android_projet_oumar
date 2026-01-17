@@ -8,7 +8,15 @@ public class CategoryTotal {
         return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public double getTotal() {
         return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 }
