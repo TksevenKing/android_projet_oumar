@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">WariTrack</string>
+    <string name="amount_format">%.2f</string>
+    <string name="filter_all">Toutes</string>
+    <string name="search_hint">Rechercher note ou catégorie</string>
+    <string name="category_hint">Catégorie</string>
+    <string name="note_hint">Note (optionnel)</string>
+    <string name="amount_hint">Montant</string>
+    <string name="pick_date">Choisir la date</string>
+    <string name="save">Enregistrer</string>
+    <string name="total_month">Total du mois</string>
+    <string name="total_all">Total global</string>
+    <string name="top_categories">Top 3 catégories</string>
+    <string name="total_month_format">Total du mois : %.2f</string>
+    <string name="total_all_format">Total global : %.2f</string>
+    <string name="no_top_categories">Pas encore de catégories</string>
+    <string name="title_add_expense">Ajouter une dépense</string>
+    <string name="title_edit_expense">Modifier la dépense</string>
+    <string name="expense_deleted">Dépense supprimée</string>
+    <string name="expense_saved">Dépense enregistrée</string>
+    <string name="undo">Annuler</string>
+    <string name="no_note">Aucune note</string>
+    <string name="error_amount_required">Le montant est requis</string>
+    <string name="error_amount_invalid">Montant invalide</string>
+    <string name="error_category_required">La catégorie est requise</string>
+</resources>
