@@ -1,6 +1,11 @@
 package com.waritrack.data;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "expenses")
 public class Expense {
+    @PrimaryKey(autoGenerate = true)
     private long id;
     private double amount;
     private String category;
