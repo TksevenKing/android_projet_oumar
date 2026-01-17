@@ -17,15 +17,28 @@ import com.waritrack.util.DateUtils;
 
 public class ExpenseAdapter extends ListAdapter<Expense, ExpenseAdapter.ExpenseViewHolder> {
     interface ExpenseListener {
+        void onItemClick(Expense expense);
         void onEdit(Expense expense);
         void onDelete(Expense expense);
     }
 
     private final ExpenseListener listener;
+    private boolean privacyMode;
+    private String currency;
 
     public ExpenseAdapter(ExpenseListener listener) {
         super(DIFF_CALLBACK);
         this.listener = listener;
+    }
+
+    public void setPrivacyMode(boolean privacyMode) {
+        this.privacyMode = privacyMode;
+        notifyDataSetChanged();
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+        notifyDataSetChanged();
     }
 
     private static final DiffUtil.ItemCallback<Expense> DIFF_CALLBACK =
@@ -75,14 +88,22 @@ public class ExpenseAdapter extends ListAdapter<Expense, ExpenseAdapter.ExpenseV
         }
 
         void bind(Expense expense) {
-            String amount = itemView.getContext().getString(R.string.amount_format, expense.getAmount());
-            amountText.setText(amount);
+            if (privacyMode) {
+                amountText.setText(itemView.getContext().getString(R.string.amount_hidden));
+            } else if (currency == null || currency.isEmpty()) {
+                String amount = itemView.getContext().getString(R.string.amount_format, expense.getAmount());
+                amountText.setText(amount);
+            } else {
+                String amount = itemView.getContext().getString(R.string.amount_currency_format, expense.getAmount(), currency);
+                amountText.setText(amount);
+            }
             categoryText.setText(expense.getCategory());
             dateText.setText(DateUtils.formatDate(expense.getDate()));
             noteText.setText(expense.getNote().isEmpty() ? itemView.getContext().getString(R.string.no_note) : expense.getNote());
 
             editButton.setOnClickListener(v -> listener.onEdit(expense));
             deleteButton.setOnClickListener(v -> listener.onDelete(expense));
+            itemView.setOnClickListener(v -> listener.onItemClick(expense));
         }
     }
 }

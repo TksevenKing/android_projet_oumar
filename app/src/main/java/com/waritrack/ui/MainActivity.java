@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.waritrack.R;
 import com.waritrack.WariTrackApp;
 import com.waritrack.data.CategoryTotal;
 import com.waritrack.data.Expense;
+import com.waritrack.util.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Ex
 
         ViewModelFactory factory = new ViewModelFactory(((WariTrackApp) getApplication()).getRepository());
         viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_expenses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -107,6 +112,13 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Ex
         viewModel.getTopCategories().observe(this, this::renderTopCategories);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.setPrivacyMode(PreferenceUtils.isPrivacyModeEnabled(this));
+        adapter.setCurrency(PreferenceUtils.getCurrency(this));
+    }
+
     private void renderTopCategories(List<CategoryTotal> categories) {
         if (categories == null || categories.isEmpty()) {
             topCategoriesText.setText(getString(R.string.no_top_categories));
@@ -134,6 +146,13 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Ex
     }
 
     @Override
+    public void onItemClick(Expense expense) {
+        Intent intent = new Intent(this, ExpenseDetailActivity.class);
+        intent.putExtra(ExpenseDetailActivity.EXTRA_EXPENSE_ID, expense.getId());
+        startActivity(intent);
+    }
+
+    @Override
     public void onDelete(Expense expense) {
         lastDeletedExpense = expense;
         viewModel.deleteExpense(expense);
@@ -145,5 +164,25 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Ex
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_categories) {
+            startActivity(new Intent(this, CategoriesActivity.class));
+            return true;
+        }
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

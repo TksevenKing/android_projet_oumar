@@ -124,6 +124,19 @@ public class ExpenseSqliteDao {
         return totals;
     }
 
+    public List<Expense> getExpensesBetweenSync(long start, long end) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String sql = "SELECT id, amount, category, date, note FROM expenses WHERE date BETWEEN ? AND ? ORDER BY date DESC";
+        String[] args = {String.valueOf(start), String.valueOf(end)};
+        List<Expense> expenses = new ArrayList<>();
+        try (Cursor cursor = db.rawQuery(sql, args)) {
+            while (cursor.moveToNext()) {
+                expenses.add(mapExpense(cursor));
+            }
+        }
+        return expenses;
+    }
+
     private Expense mapExpense(Cursor cursor) {
         Expense expense = new Expense(
                 cursor.getDouble(cursor.getColumnIndexOrThrow("amount")),

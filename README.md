@@ -19,10 +19,14 @@ Mini-projet Android Studio (Java) pour suivre des dépenses avec une architectur
 - Statistiques : total du mois courant, total global, top 3 catégories.
 - Validation : montant > 0, catégorie non vide.
 - UX : FAB pour ajouter, Snackbar pour annuler une suppression.
+- Écrans additionnels : détail dépense, gestion des catégories, paramètres (devise, format date, mode confidentialité, export CSV).
 
 ## Captures attendues (texte)
 - Écran principal : recherche, filtre, stats, liste des dépenses, bouton "+".
 - Écran ajout/modification : champs montants/catégorie/date/note et bouton enregistrer.
+- Écran détail : informations de dépense + actions modifier/supprimer/partager.
+- Écran catégories : liste + ajout/suppression.
+- Écran paramètres : préférences et export CSV.
 
 ## Scénarios de test
 1. Ajouter une dépense valide.
@@ -31,6 +35,7 @@ Mini-projet Android Studio (Java) pour suivre des dépenses avec une architectur
 4. Rechercher par note ou catégorie.
 5. Filtrer une catégorie spécifique.
 6. Vérifier la mise à jour des totaux et du top 3 catégories.
+7. Exporter un CSV (mois et global) et partager le fichier.
 
 ## Structure du projet
 - `com.waritrack.data` : Entity, DAO, Database, Repository.

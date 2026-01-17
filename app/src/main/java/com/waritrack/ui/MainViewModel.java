@@ -16,25 +16,21 @@ public class MainViewModel extends ViewModel {
     private final ExpenseRepository repository;
     private final MutableLiveData<FilterState> filterState = new MutableLiveData<>();
 
-    private final LiveData<List<Expense>> expenses;
-    private final LiveData<List<String>> categories;
-    private final LiveData<Double> totalAll;
+    private final LiveData<List<Expense>> expenses = Transformations.switchMap(
+            filterState,
+            state -> repository.getFiltered(state.searchQuery, state.category)
+    );
+
+    private final LiveData<List<String>> categories = repository.getCategories();
+    private final LiveData<Double> totalAll = repository.getTotalAll();
     private final LiveData<Double> totalMonth;
-    private final LiveData<List<CategoryTotal>> topCategories;
+    private final LiveData<List<CategoryTotal>> topCategories = repository.getTopCategories();
 
     public MainViewModel(ExpenseRepository repository) {
         this.repository = repository;
         filterState.setValue(new FilterState("", null));
         long[] range = getCurrentMonthRange();
         totalMonth = repository.getTotalBetween(range[0], range[1]);
-
-        expenses = Transformations.switchMap(
-                filterState,
-                state -> repository.getFiltered(state.searchQuery, state.category)
-        );
-        categories = repository.getCategories();
-        totalAll = repository.getTotalAll();
-        topCategories = repository.getTopCategories();
     }
 
     public LiveData<List<Expense>> getExpenses() {

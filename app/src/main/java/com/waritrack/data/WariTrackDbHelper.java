@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WariTrackDbHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "waritrack.db";
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 3;
 
     public WariTrackDbHelper(Context context) {
         super(context.getApplicationContext(), DB_NAME, null, DB_VERSION);
@@ -21,6 +21,7 @@ public class WariTrackDbHelper extends SQLiteOpenHelper {
                 "date INTEGER NOT NULL," +
                 "note TEXT NOT NULL DEFAULT ''" +
                 ");");
+        createCategoriesTable(db);
     }
 
     @Override
@@ -28,5 +29,22 @@ public class WariTrackDbHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE expenses ADD COLUMN note TEXT NOT NULL DEFAULT ''");
         }
+        if (oldVersion < 3) {
+            createCategoriesTable(db);
+            seedCategories(db);
+        }
+    }
+
+    private void createCategoriesTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS categories(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name TEXT NOT NULL UNIQUE," +
+                "colorHex TEXT NOT NULL DEFAULT '#2196F3'" +
+                ");");
+    }
+
+    private void seedCategories(SQLiteDatabase db) {
+        db.execSQL("INSERT OR IGNORE INTO categories(name) " +
+                "SELECT DISTINCT category FROM expenses WHERE category IS NOT NULL AND category != ''");
     }
 }

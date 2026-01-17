@@ -23,6 +23,15 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(AddEditViewModel.class)) {
             return (T) new AddEditViewModel(repository);
         }
+        if (modelClass.isAssignableFrom(ExpenseDetailViewModel.class)) {
+            return (T) new ExpenseDetailViewModel(repository);
+        }
+        if (modelClass.isAssignableFrom(CategoriesViewModel.class)) {
+            return (T) new CategoriesViewModel(repository);
+        }
+        if (modelClass.isAssignableFrom(AddEditCategoryViewModel.class)) {
+            return (T) new AddEditCategoryViewModel(repository);
+        }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
